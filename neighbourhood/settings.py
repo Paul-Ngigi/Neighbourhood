@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'user',
     'neighbourhood_App',
     'business',
+    'authentication',
     
     # Dependencies
     'rest_framework',

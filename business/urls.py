@@ -3,7 +3,7 @@ from .views import BusinessView
 from .models import BusinessModel
 
 urlpatterns = [
-    path('', BusinessView.as_view(queryset=BusinessModel.objects.all()), name='business'),
+    path('', BusinessView.as_view(), name='business'),
 ]
     
 

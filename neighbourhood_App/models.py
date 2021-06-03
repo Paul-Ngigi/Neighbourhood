@@ -11,3 +11,24 @@ class Neighbourhood(models.Model):
 
     def __str__(self):
         return self.neighbourhood_name
+    
+    def save_neighbourhood(self):
+        self.save()
+        
+    def delete_neighbourhood(self):
+        self.delete()
+    
+    @classmethod
+    def update_neighbourhood(self, id, neighbourhood_name):
+        return Neighbourhood.objects.get(id=id).update(neighbourhood_name=neighbourhood_name)
+        
+
+    @classmethod
+    def find_by_id(self, id):
+        return Neighbourhood.objects.get(pk=id)
+    
+        
+    @classmethod
+    def update_count(self, id, count):
+        return Neighbourhood.objects.get(id=id).update(count=count)
+    

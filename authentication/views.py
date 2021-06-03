@@ -1,34 +1,34 @@
-from django.http import response
 from django.shortcuts import render
-from .serializers import BusinessClass
+from .serializer import UserSerializerClass
 from rest_framework import generics, status
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import BusinessModel
+from rest_framework.views import APIView
+from .models import UserModel
+from django.contrib.auth.models import User
 
 
 # Create your views here.
-class BusinessView(APIView):
-    serializer_class = BusinessClass
-    all_business = BusinessModel.objects.all()
+class UserRegistrationView(generics.GenericAPIView):
+    serializer_class = UserSerializerClass
+    all_users = User.objects.all()
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        business_data = serializer.data
+        user_data = serializer.data
 
         response = {
             'data': {
-                'business': dict(business_data),
+                "user": dict(user_data),
                 "status": "success",
-                "message": "Business created successfully"
+                "message": "Account created successfully"
             }
         }
 
         return Response(response, status=status.HTTP_201_CREATED)
 
     def get(self, request, *args, **kwargs):
-        serializers = BusinessClass(self.all_business, many=True)
+        serializers = UserSerializerClass(self.all_users, many=True)
         return Response(serializers.data)
