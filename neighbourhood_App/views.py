@@ -4,12 +4,14 @@ from .serializers import NeighbourhoodClass
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from .models import Neighbourhood
 
 
 # Create your views here.
 
-class Neighbourhood(generics.GenericAPIView):
+class NeighbourhoodView(generics.GenericAPIView):
     serializer_class = NeighbourhoodClass
+    all_neighbourhoods = Neighbourhood.objects.all()
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
@@ -27,3 +29,7 @@ class Neighbourhood(generics.GenericAPIView):
         }
 
         return Response(response, status=status.HTTP_201_CREATED)
+
+    def get(self, request, *args, **kwargs):
+        serializers = NeighbourhoodClass(self.all_neighbourhoods, many=True)
+        return Response(serializers.data)

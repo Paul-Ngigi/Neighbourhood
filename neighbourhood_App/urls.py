@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import Neighbourhood
+from .views import NeighbourhoodView
+from .models import Neighbourhood
 
 urlpatterns = [
-    path('', Neighbourhood.as_view(), name='neighbourhood')
+    path('', NeighbourhoodView.as_view(queryset=Neighbourhood.objects.all()), name='neighbourhood')
 ]
