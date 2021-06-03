@@ -4,27 +4,31 @@ from .serializers import BusinessClass
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from .models import BusinessModel
 
 
 # Create your views here.
 class BusinessView(generics.GenericAPIView):
     serializer_class = BusinessClass
-    
+    all_business = BusinessModel.objects.all()
+
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        
+
         business_data = serializer.data
-        
+
         response = {
             'data': {
-                'business':dict(business_data),
+                'business': dict(business_data),
                 "status": "success",
                 "message": "Business created successfully"
             }
         }
-        
+
         return Response(response, status=status.HTTP_201_CREATED)
-        
-        
+
+    def get(self, request, *args, **kwargs):
+        serializers = BusinessClass(self.all_business, many=True)
+        return Response(serializers.data)
