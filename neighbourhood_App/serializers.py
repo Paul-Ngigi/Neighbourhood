@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Neighbourhood
 
 
-class NeighbourhoodClass(serializers.ModelSerializer):
+class NeighbourhoodSerializer(serializers.ModelSerializer):
     class Meta:
         model = Neighbourhood
         fields = "__all__"
@@ -16,3 +16,11 @@ class NeighbourhoodClass(serializers.ModelSerializer):
         )
         neighbour.save()
         return neighbour
+
+    def update(self, instance, validated_data):
+        instance.neighbourhood_name = validated_data.get('neighbourhood_name', instance.neighbourhood_name)
+        instance.location = validated_data.get('location', instance.location)
+        instance.count = validated_data.get('count', instance.count)
+        
+        instance.save()
+        return instance

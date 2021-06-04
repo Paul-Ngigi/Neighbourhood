@@ -1,9 +1,10 @@
 from django.urls import path
 from .views import NeighbourhoodView
-from .models import Neighbourhood
 
+# App urls
 urlpatterns = [
-    path('', NeighbourhoodView.as_view(), name='neighbourhood'),
-    path('<int:id>/delete/', NeighbourhoodView.as_view(), name='delete_neighbourhood'),
-    path('<int:id>/update/', NeighbourhoodView.as_view(), name='update_neighbourhood')
+    path('', NeighbourhoodView.as_view()),
+    path('<int:pk>/', NeighbourhoodView.as_view()),
+    path('update/<int:pk>/', NeighbourhoodView.as_view()),
+    path('delete/<int:pk>/', NeighbourhoodView.as_view())
 ]

@@ -1,4 +1,5 @@
-from django.http import response
+from django.db import models
+from django.http import response, Http404
 from django.shortcuts import render
 from .serializers import BusinessClass
 from rest_framework import generics, status
@@ -11,6 +12,13 @@ from .models import BusinessModel
 class BusinessView(APIView):
     serializer_class = BusinessClass
     all_business = BusinessModel.objects.all()
+    model = BusinessModel
+    
+    def get_business(self, pk):
+        try:
+            return self.model.objects.get(pk=pk)
+        except self.model.DoesNotExist:
+            return Http404
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
@@ -32,3 +40,17 @@ class BusinessView(APIView):
     def get(self, request, *args, **kwargs):
         serializers = BusinessClass(self.all_business, many=True)
         return Response(serializers.data)
+
+    def put(self, request, pk, format=None, *args, **kwargs):
+        business = self.get_business(pk)
+        serializers = BusinessClass(business, request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None, *args, **kwargs):
+        business = self.get_business(pk)
+        business.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

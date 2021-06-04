@@ -19,3 +19,13 @@ class BusinessClass(serializers.ModelSerializer):
 
         business.save()
         return business
+    
+    
+    def update(self, instance, validated_data):
+        instance.business_name = validated_data.get('business_name', instance.business_name)
+        instance.admin = validated_data.get('admin', instance.admin)
+        instance.neighbourhood = validated_data.get('neighbourhood', instance.neighbourhood)
+        instance.business_email = validated_data.get('business_email', instance.business_email)
+        
+        instance.save()
+        return instance
